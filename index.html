@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora TAF Militar</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+    <div class="pagina-inicial">
+        <h3>Índices do TAF</h3>
+        <p>Esta página, não é uma página oficial do Exército Brasileiro, e tem o único objetivo de permitir uma consulta rápido aos índices do Teste de Avalição Física (TAF), publicados na <span> PORTARIA – EME/C Ex Nº 850, DE 31 DE AGOSTO DE 2022, que Aprovou a Diretriz para a Avaliação Física do Exército Brasileiro (EB20-D03.053).</span> A portaria pode ser acessada aqui: <a href="https://bdex.eb.mil.br/jspui/bitstream/123456789/11692/1/Port_850-EME_Dtz_Avl_Fis_EB.pdf" target="_blank">Portaria nº 850</a>
+        </p>
+        <button id="indices">Conferir Índices</button>
+        <button>Verificar Desempenho</button>
+    </div>
+    <div class="container">
+        <h1>Calculadora de Índice TAF</h1>
+        
+        <div class="input-group">
+            <label for="linhaEnsino">Linha de Ensino:</label>
+            <select id="linhaEnsino">
+                <option value="" disabled selected>Selecione a Linha</option>
+                <option value="LEMB">LEMB</option>
+                <option value="LEMS_LEMC_LEMCT">LEMS, LEMC e LEMCT</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo">
+                <option value="" disabled selected>Selecione o Sexo</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" min="18" max="65" placeholder="Sua idade">
+        </div>
+
+        <hr>
+
+        <h2>Valores de Desempenho</h2>
+        <div class="input-group">
+            <label for="corrida">Corrida (metros):</label>
+            <input type="number" id="corrida" placeholder="Ex: 2800">
+        </div>
+        <div class="input-group">
+            <label for="flexaoBracos">Flexão de Braços (repetições):</label>
+            <input type="number" id="flexaoBracos" placeholder="Ex: 30">
+        </div>
+        <div class="input-group">
+            <label for="abdominal">Abdominal (repetições):</label>
+            <input type="number" id="abdominal" placeholder="Ex: 60">
+        </div>
+        <div class="input-group">
+            <label for="barraFixa">Barra Fixa (repetições/segundos):</label>
+            <input type="text" id="barraFixa" placeholder="Ex: 8 (rep) ou 50 (seg)">
+        </div>
+
+        <button onclick="calcularIndice()">Calcular Desempenho</button>
+
+        <div id="resultado" class="resultado">
+            </div>
+
+    </div>
+
+    <script src="./assets/js/script.js" defer></script>
+</body>
+</html>
