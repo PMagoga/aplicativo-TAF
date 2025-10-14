@@ -1,15 +1,15 @@
 const CACHE_NAME = "taf-cache-v1";
 const urlsToCache = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./assets/js/script.js",
-  "./assets/js/utils.js",
-  "./assets/js/indices.js",
-  "./assets/js/desempenho.js",
-  "./assets/css/style.css",
-  "./assets/images/discobulo.png",
-  "./assets/images/botao-home.png",
+  "/aplicativo-TAF/",
+  "/aplicativo-TAF/index.html",
+  "/aplicativo-TAF/manifest.json",
+  "/aplicativo-TAF/assets/js/script.js",
+  "/aplicativo-TAF/assets/js/utils.js",
+  "/aplicativo-TAF/assets/js/indices.js",
+  "/aplicativo-TAF/assets/js/desempenho.js",
+  "/aplicativo-TAF/assets/css/style.css",
+  "/aplicativo-TAF/assets/images/discobulo.png",
+  "/aplicativo-TAF/assets/images/botao-home.png",
 ];
 
 // Instala o service worker e adiciona os arquivos ao cache
