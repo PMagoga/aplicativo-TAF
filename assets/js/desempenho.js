@@ -7,7 +7,7 @@ document
 /**
  * Função utilitária que analisa o valor do usuário (resultado)
  * contra os limites de desempenho da tabela (requisitos) e retorna o conceito.
- * * @param {number} resultado - O valor do usuário (e.g., 2500 metros).
+ * @param {number} resultado - O valor do usuário (e.g., 2500 metros).
  * @param {object} requisitosFaixa - O objeto de requisitos para a faixa etária (e.g., { I: '≤ 2599', R: '2600-2799', ... }).
  * @param {string} tipoTeste - O tipo de teste (Corrida, Flexão, Abdominal, Barra).
  * @returns {string} O conceito alcançado (I, R, B, MB, E, Suficiência) ou 'NA (Insuficiente)'.
@@ -22,7 +22,7 @@ function obterNota(resultado, requisitosFaixa, tipoTeste) {
     const limiteNumerico = Number(requisito.replace(/[^0-9]/g, ""));
 
     // 1. Caso de Suficiência
-    if (nota === "Suficiência") {
+    if (nota.toLowerCase() === "suficiência") {
       const valorSuficiencia = Number(requisito.replace(/[^0-9]/g, ""));
       if (resultado >= valorSuficiencia) {
         return "Suficiência";
