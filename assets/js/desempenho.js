@@ -5,100 +5,138 @@ document
   .addEventListener("click", calcularDesempenho);
 
 /**
- * Função utilitária que analisa o valor do usuário (resultado)
- * contra os limites de desempenho da tabela (requisitos) e retorna o conceito.
- * @param {number} resultado - O valor do usuário (e.g., 2500 metros).
- * @param {object} requisitosFaixa - O objeto de requisitos para a faixa etária (e.g., { I: '≤ 2599', R: '2600-2799', ... }).
- * @param {string} tipoTeste - O tipo de teste (Corrida, Flexão, Abdominal, Barra).
- * @returns {string} O conceito alcançado (I, R, B, MB, E, Suficiência) ou 'NA (Insuficiente)'.
+ * Função que compara o resultado do usuário com os limites da tabela
+ * e retorna o conceito (I, R, B, MB, E, Suficiência etc.).
+ *
+ * Regras chave:
+ * - Para barras normais (tipoTeste contendo "barra"), se existir "Suficiência"
+ *   o código tenta encontrar qual sub-conceito (E, MB, B, R) se aplica.
+ * - Para "sustentação" (caso feminino >=40 no exemplo), tratamos Suficiência/Insuficiência
+ *   sem mapear para E/MB/B/R: Suficiência mantém peso 2; Insuficiência puxa para 1.
  */
 function obterNota(resultado, requisitosFaixa, tipoTeste) {
   if (resultado === null) return "NA";
 
-  // O loop processa na ordem em que aparecem no JSON (geralmente I -> E)
+  const isBarraFixa = tipoTeste.toLowerCase().includes("barra"); // ex: "barra fixa"
+  const isSustentacao = tipoTeste.toLowerCase().includes("sustent"); // ex: "sustentação"
+
   for (const nota in requisitosFaixa) {
     const requisito = String(requisitosFaixa[nota]);
-    // Remove tudo que não for número para obter o limite (3 de "<= 3", 4 de "4", 9 de "9")
     const limiteNumerico = Number(requisito.replace(/[^0-9]/g, ""));
 
-    // 1. Caso de Suficiência (aceita grafias com ou sem acento)
+    // 1️⃣ Caso de SUFICIÊNCIA
     if (
       nota.toLowerCase() === "suficiência" ||
       nota.toLowerCase() === "suficiencia"
     ) {
       const valorSuficiencia = Number(requisito.replace(/[^0-9]/g, ""));
-      if (resultado >= valorSuficiencia) {
+
+      // --- Caso: Barra fixa "normal" (ex.: menores de 40) ---
+      // Se for barra fixa e não for sustentação (ou for barra fixa comum),
+      // e o resultado >= suficiência, tentamos mapear para E/MB/B/R
+      if (isBarraFixa && !isSustentacao && resultado >= valorSuficiencia) {
+        for (const subNota of ["E", "MB", "B", "R"]) {
+          if (requisitosFaixa[subNota]) {
+            const req = String(requisitosFaixa[subNota]);
+            // ≥
+            if (req.includes("≥")) {
+              const valor = Number(req.replace(/[^0-9]/g, ""));
+              if (resultado >= valor) return subNota;
+            }
+            // faixa Min-Max
+            if (req.includes("-")) {
+              const [minStr, maxStr] = req.split("-");
+              const min = Number(minStr.replace(/[^0-9]/g, ""));
+              const max = Number(maxStr.replace(/[^0-9]/g, ""));
+              if (resultado >= min && resultado <= max) return subNota;
+            }
+            // valor único (ex: "4" ou "9")
+            if (
+              !req.includes("≤") &&
+              !req.includes("≥") &&
+              !req.includes("-")
+            ) {
+              const valor = Number(req.replace(/[^0-9]/g, ""));
+              // para R: exigir igualdade; para E: >=; para outros, aceitar >=
+              if (subNota === "R") {
+                if (resultado === valor) return subNota;
+              } else {
+                if (resultado >= valor) return subNota;
+              }
+            }
+          }
+        }
+        // se não encontrou sub-conceito, mantém "Suficiência"
         return "Suficiência";
       }
+
+      // --- Caso: Sustentação (ex.: feminino >= 40) ---
+      // Aqui NÃO tentamos mapear para E/MB/B/R: tratamos Suficiência / Insuficiência direto.
+      if (isSustentacao) {
+        if (resultado >= valorSuficiencia) return "Suficiência";
+        return "Insuficiência";
+      }
+
+      // --- Caso geral (não barra fixa nem sustentação) ---
+      if (resultado >= valorSuficiencia) return "Suficiência";
       return "Insuficiência";
     }
 
-    // 2. Caso de 'Maior ou Igual a' (≥)
+    // 2️⃣ Maior ou igual (≥)
     if (requisito.includes("≥")) {
-      if (resultado >= limiteNumerico) {
-        return nota;
-      }
+      if (resultado >= limiteNumerico) return nota;
     }
 
-    // 3. Caso de Faixa (Min-Max)
+    // 3️⃣ Faixa numérica (min-max)
     if (requisito.includes("-")) {
       const [minStr, maxStr] = requisito.split("-");
       const min = Number(minStr.replace(/[^0-9]/g, ""));
       const max = Number(maxStr.replace(/[^0-9]/g, ""));
-
-      if (resultado >= min && resultado <= max) {
-        return nota;
-      }
+      if (resultado >= min && resultado <= max) return nota;
     }
 
-    // 4. CORREÇÃO: Caso de Valor Único sem Operadores (Ex: R: "4", E: "9")
-    // Este bloco lida com conceitos que são definidos por um único número,
-    // mas que não são I ou faixas.
+    // 4️⃣ Valor único (sem operador)
     if (
       !requisito.includes("-") &&
       !requisito.includes("≤") &&
       !requisito.includes("≥")
     ) {
-      // Se for R, só se encaixa se for EXATAMENTE aquele valor.
-      if (nota === "R" && resultado === limiteNumerico) {
-        return nota;
-      }
-      // Se for E, se encaixa se for MAIOR OU IGUAL (por ser o conceito máximo)
-      if (nota === "E" && resultado >= limiteNumerico) {
-        return nota;
-      }
+      if (nota === "R" && resultado === limiteNumerico) return nota;
+      if (nota === "E" && resultado >= limiteNumerico) return nota;
     }
 
-    // 5. Caso de 'Menor ou Igual a' (≤) (Geralmente I)
+    // 5️⃣ Menor ou igual (≤)
     if (requisito.includes("≤")) {
-      if (resultado <= limiteNumerico) {
-        return nota;
-      }
+      if (resultado <= limiteNumerico) return nota;
     }
   }
 
-  // Se o resultado for maior que I, mas menor que o R mais baixo, ele é Insuficiente.
   return "NA (Insuficiente)";
 }
 
 /**
- * Função principal para calcular o desempenho do usuário, encontrando o pior índice global.
+ * Função principal de cálculo de desempenho.
+ *
+ * Observações:
+ * - Para o caso específico que você pediu (LEMB, feminino, >=40),
+ *   chamamos obterNota com tipoTeste = "sustentação" para que o comportamento
+ *   de Suficiência/Insuficiência seja tratado conforme definido acima.
  */
 async function calcularDesempenho() {
-  // 1. Mapeamento de Conceitos (para determinar o 'pior' índice)
+  // 📊 Hierarquia dos conceitos (quanto maior o número, melhor o desempenho)
   const conceitosOrdem = {
-    E: 5, // Excelente (Melhor)
+    E: 5,
     MB: 4,
     B: 3,
-    R: 2, // Regular
-    Suficiência: 2,
+    R: 2,
+    Suficiência: 2, // mesmo peso de R
     Insuficiência: 1,
     "NA (Insuficiente)": 1,
-    I: 1, // Insuficiente (Pior)
-    NA: 0, // Não Avaliado
+    I: 1,
+    NA: 0,
   };
 
-  // 2. Coleta os valores
+  // 🧾 Coleta de dados
   const ensino = document.getElementById("linhaEnsino_Desempenho").value;
   const sexo = document.getElementById("sexo_Desempenho").value;
   const idade = document.getElementById("idade_Desempenho").value;
@@ -111,17 +149,15 @@ async function calcularDesempenho() {
   const barraFixa = Number(barraFixaInput.replace(/[^0-9]/g, "")) || null;
 
   const resultadoDiv = document.getElementById("resultado_Desempenho");
-
   resultadoDiv.innerHTML = "<p>Carregando...</p>";
 
-  // 3. Validação básica
+  // 🚫 Validação
   if (!ensino || !sexo || !idade) {
     resultadoDiv.innerHTML =
       "<p style='color:red;'>Selecione a Linha de Ensino, o Sexo e digite sua Idade.</p>";
     return;
   }
 
-  // 4. Busca dos dados
   try {
     const dados = await fetchDadosTAF();
     const testes = dados.tabelas_de_aptidao[ensino]?.[sexo];
@@ -133,25 +169,21 @@ async function calcularDesempenho() {
     }
 
     const idadeNum = Number(idade);
-    let resultadosFinais = "<h2>Seu Desempenho (" + idade + " anos)</h2>";
-
-    // Rastreamento do Pior Conceito
-    let piorConceitoValor = 6;
+    let resultadosFinais = `<h2>Seu Desempenho (${idade} anos)</h2>`;
+    let piorConceitoValor = 6; // inicia com o melhor possível
     let piorConceitoNome = "";
 
-    // 5. Itera sobre os testes
+    // 🔁 Itera sobre os testes
     testes.forEach((teste) => {
       const requisitos = teste.requisitos_por_idade;
       const faixaEtaria = encontrarFaixaEtaria(idadeNum, requisitos);
       const faixa = requisitos[faixaEtaria];
-
       if (!faixa) return;
 
       let valorUsuario = null;
       let tipoTeste = teste.teste.toLowerCase();
       let valorInputOriginal = "";
 
-      // Mapeia o valor de entrada
       if (tipoTeste.includes("corrida")) {
         valorUsuario = corrida;
         valorInputOriginal = corrida;
@@ -164,36 +196,35 @@ async function calcularDesempenho() {
       } else if (tipoTeste.includes("barra fixa")) {
         valorUsuario = barraFixa;
         valorInputOriginal = barraFixaInput;
-      } else {
-        return;
-      }
+      } else return;
 
       if (valorUsuario === null) return;
 
-      // 6. Calcula a nota (com tratamento especial para sustentação)
+      // 🎯 Calcula conceito
       let nota;
-
-      // Para o caso especial LEMB - Feminino - Acima de 40 anos → Barra é SUSTENTAÇÃO (em segundos)
+      // Caso especial: LEMB - feminino - >= 40 anos => sustentação (segundos)
       if (
         ensino === "LEMB" &&
         sexo === "feminino" &&
         idadeNum >= 40 &&
         tipoTeste.includes("barra fixa")
       ) {
+        // Chamamos como "sustentação" para que a função trate Suficiência/Insuficiência
         nota = obterNota(valorUsuario, faixa, "sustentação");
       } else {
+        // Para demais casos chamamos pelo tipo real (barra fixa incluída),
+        // assim a lógica de mapear Suficiência para E/MB/B/R aplica-se.
         nota = obterNota(valorUsuario, faixa, tipoTeste);
       }
 
-      // Compara a nota atual com a pior nota registrada
+      // 🧮 Avalia conceito global (menor conceito = pior desempenho)
       const valorNota = conceitosOrdem[nota] || 0;
-
       if (valorNota > 0 && valorNota < piorConceitoValor) {
         piorConceitoValor = valorNota;
         piorConceitoNome = nota;
       }
 
-      // 7. Formata o resultado individual
+      // 🧾 Exibe resultado individual
       resultadosFinais += `
         <div class="card">
           <h3>${teste.teste}</h3>
@@ -211,17 +242,16 @@ async function calcularDesempenho() {
       `;
     });
 
-    // 8. Conclusão Final (Conceito Global)
+    // 🏁 Conceito global = pior conceito entre os testes
     const conceitoFinal = piorConceitoNome || "N/A (Preencha os testes)";
     const corFinal = piorConceitoValor <= 1 ? "red" : "green";
 
-    const statusFinal = `
+    resultadoDiv.innerHTML = `
       <h2 style='color: ${corFinal};'>
         Seu Conceito Global é: <span style="font-weight: bold;">${conceitoFinal}</span>
       </h2>
+      ${resultadosFinais}
     `;
-
-    resultadoDiv.innerHTML = statusFinal + resultadosFinais;
   } catch (erro) {
     console.error("Erro no cálculo de desempenho:", erro);
     resultadoDiv.innerHTML =
