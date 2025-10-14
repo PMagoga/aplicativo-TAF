@@ -21,8 +21,11 @@ function obterNota(resultado, requisitosFaixa, tipoTeste) {
     // Remove tudo que não for número para obter o limite (3 de "<= 3", 4 de "4", 9 de "9")
     const limiteNumerico = Number(requisito.replace(/[^0-9]/g, ""));
 
-    // 1. Caso de Suficiência
-    if (nota.toLowerCase() === "suficiência") {
+    // 1. Caso de Suficiência (aceita grafias com ou sem acento)
+    if (
+      nota.toLowerCase() === "suficiência" ||
+      nota.toLowerCase() === "suficiencia"
+    ) {
       const valorSuficiencia = Number(requisito.replace(/[^0-9]/g, ""));
       if (resultado >= valorSuficiencia) {
         return "Suficiência";
