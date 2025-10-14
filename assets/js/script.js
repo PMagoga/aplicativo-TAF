@@ -16,11 +16,11 @@ desempenho.addEventListener("click", abrirDesempenho);
 
 // listeners para os botões home
 homeBtn.addEventListener("click", () => {
-  window.location.href = "/";
+  window.location.href = "/aplicativo-TAF/";
 });
 
 homeBtn2.addEventListener("click", () => {
-  window.location.href = "/";
+  window.location.href = "/aplicativo-TAF/";
 });
 
 function abrirIndices() {
