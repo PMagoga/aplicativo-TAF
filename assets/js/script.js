@@ -32,3 +32,25 @@ function abrirDesempenho() {
   pagina_inicial.style.display = "none";
   pagina_desempenho.classList.add("container-desempenho-active");
 }
+
+// funções para instalar o app
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  // Impede que o Chrome exiba o banner automático
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Exibe seu próprio botão (ex: "Instalar App")
+  const installButton = document.getElementById("instalarApp");
+  installButton.style.display = "block";
+
+  installButton.addEventListener("click", async () => {
+    installButton.style.display = "none";
+    deferredPrompt.prompt();
+
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Usuário escolheu: ${outcome}`);
+    deferredPrompt = null;
+  });
+});
