@@ -167,8 +167,20 @@ async function calcularDesempenho() {
 
       if (valorUsuario === null) return;
 
-      // 6. Calcula a nota
-      const nota = obterNota(valorUsuario, faixa, tipoTeste);
+      // 6. Calcula a nota (com tratamento especial para sustentação)
+      let nota;
+
+      // Para o caso especial LEMB - Feminino - Acima de 40 anos → Barra é SUSTENTAÇÃO (em segundos)
+      if (
+        ensino === "LEMB" &&
+        sexo === "feminino" &&
+        idadeNum >= 40 &&
+        tipoTeste.includes("barra fixa")
+      ) {
+        nota = obterNota(valorUsuario, faixa, "sustentação");
+      } else {
+        nota = obterNota(valorUsuario, faixa, tipoTeste);
+      }
 
       // Compara a nota atual com a pior nota registrada
       const valorNota = conceitosOrdem[nota] || 0;
@@ -180,32 +192,31 @@ async function calcularDesempenho() {
 
       // 7. Formata o resultado individual
       resultadosFinais += `
-                <div class="card">
-                    <h3>${teste.teste}</h3>
-                    <p><strong>Faixa Avaliada:</strong> ${faixaEtaria} | <strong>Unidade:</strong> ${
+        <div class="card">
+          <h3>${teste.teste}</h3>
+          <p><strong>Faixa Avaliada:</strong> ${faixaEtaria} | 
+             <strong>Unidade:</strong> ${teste.unidade}</p>
+          <p><strong>Seu Resultado:</strong> ${valorInputOriginal} ${
         teste.unidade
       }</p>
-                    <p><strong>Seu Resultado:</strong> ${valorInputOriginal} ${
-        teste.unidade
-      }</p>
-                    <p><strong>Conceito:</strong> <span style="font-weight: bold; color: ${
-                      valorNota <= 1 ? "red" : "green"
-                    };">${nota}</span></p>
-                </div>
-            `;
+          <p><strong>Conceito:</strong> 
+            <span style="font-weight: bold; color: ${
+              valorNota <= 1 ? "red" : "green"
+            };">${nota}</span>
+          </p>
+        </div>
+      `;
     });
 
     // 8. Conclusão Final (Conceito Global)
-
     const conceitoFinal = piorConceitoNome || "N/A (Preencha os testes)";
-
     const corFinal = piorConceitoValor <= 1 ? "red" : "green";
 
     const statusFinal = `
-            <h2 style='color: ${corFinal};'>
-                Seu Conceito Global é: <span style="font-weight: bold;">${conceitoFinal}</span>
-            </h2>
-        `;
+      <h2 style='color: ${corFinal};'>
+        Seu Conceito Global é: <span style="font-weight: bold;">${conceitoFinal}</span>
+      </h2>
+    `;
 
     resultadoDiv.innerHTML = statusFinal + resultadosFinais;
   } catch (erro) {
