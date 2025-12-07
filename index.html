@@ -1,150 +1,181 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manisfest" href="./manisfest.json">
-    <meta name="theme-color" content="#4b5320">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manisfest" href="./manisfest.json" />
+    <meta name="theme-color" content="#4b5320" />
     <title>Calculadora TAF Militar</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
     <div class="pagina-inicial">
-        <h1 id="titulo-pagina">Índices do TAF</h1>
-        <p>Este não é um aplicativo oficial do Exército Brasileiro e tem o único objetivo de permitir uma consulta rápida aos índices do Teste de Avalição Física (TAF), publicados na <span>PORTARIA – EME/C Ex Nº 850, DE 31 DE AGOSTO DE 2022, que Aprovou a Diretriz para a Avaliação Física do Exército Brasileiro (EB20-D03.053).</span>
-          A portaria pode ser acessada aqui: <a href="https://bdex.eb.mil.br/jspui/bitstream/123456789/11692/1/Port_850-EME_Dtz_Avl_Fis_EB.pdf" target="_blank">Portaria nº 850</a></p>
-        <img id="discobulo" src="./assets/images/discobulo.png" alt="Discóbulo">
-        <button id="indices">Conferir Índices</button>
-        <button id="desempenho">Verificar Desempenho</button>
-        <br><br><br>
-        <footer>
-            <a href="https://www.flaticon.com/free-icons/home-button" title="home button icons">Home button icons created by hqrloveq - Flaticon</a>
-                <button id="instalarApp" style="
-                    display:none;
-                    background-color:#4b5320;
-                    color:white;
-                    border:none;
-                    border-radius:8px;
-                    padding:10px 20px;
-                    font-size:16px;
-                    cursor:pointer;
-                    box-shadow:0 2px 5px rgba(0,0,0,0.2);
-                ">
-                    📱 Instalar Aplicativo
-                </button>
-        </footer>
+      <h1 id="titulo-pagina">Índices do TAF</h1>
+      <p>
+        Este não é um aplicativo oficial do Exército Brasileiro e tem o único
+        objetivo de permitir uma consulta rápida aos índices do Teste de
+        Avalição Física (TAF), publicados na
+        <span
+          >PORTARIA – EME/C Ex Nº 850, DE 31 DE AGOSTO DE 2022, que Aprovou a
+          Diretriz para a Avaliação Física do Exército Brasileiro
+          (EB20-D03.053).</span
+        >
+        A portaria pode ser acessada aqui:
+        <a
+          href="https://bdex.eb.mil.br/jspui/bitstream/123456789/11692/1/Port_850-EME_Dtz_Avl_Fis_EB.pdf"
+          target="_blank"
+          >Portaria nº 850</a
+        >
+      </p>
+      <img id="discobulo" src="./assets/images/discobulo.png" alt="Discóbulo" />
+      <button id="indices">Conferir Índices</button>
+      <button id="desempenho">Verificar Desempenho</button>
+      <br /><br /><br />
+      <footer>
+        <a
+          href="https://www.flaticon.com/free-icons/home-button"
+          title="home button icons"
+          >Home button icons created by hqrloveq - Flaticon</a
+        >
+        <button
+          id="instalarApp"
+          style="
+            display: none;
+            background-color: #4b5320;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+          "
+        >
+          📱 Instalar Aplicativo
+        </button>
+      </footer>
     </div>
-    
 
     <div class="container-indices">
-        <div class="header-container">
-            <img id="home" src="./assets/images/botao-home.png" alt="Home">
-            <h1>Índices TAF</h1>
-        </div>
-        
-        <div class="input-group">
-            <label for="linhaEnsino_Indices">Linha de Ensino:</label>
-            <select id="linhaEnsino_Indices">
-                <option value="" disabled selected>Selecione a Linha</option>
-                <option value="LEMB">LEMB</option>
-                <option value="LEMS_LEMC_LEMCT">LEMS, LEMC e LEMCT</option>
-            </select>
-        </div>
+      <div class="header-container">
+        <img id="home" src="./assets/images/home-button.png" alt="Home" />
+        <h1>Índices TAF</h1>
+      </div>
 
-        <div class="input-group">
-            <label for="sexo_Indices">Sexo:</label>
-            <select id="sexo_Indices">
-                <option value="" disabled selected>Selecione o Sexo</option>
-                <option value="masculino">Masculino</option>
-                <option value="feminino">Feminino</option>
-            </select>
-        </div>
-        
-        <div class="input-group">
-            <label for="idade_Indices">Idade (anos):</label>
-            <input type="number" id="idade_Indices" min="18" max="65" placeholder="Sua idade">
-        </div>
-        <button id="mostrarIndices">Mostrar Índices</button>
-        
-        <hr>
+      <div class="input-group">
+        <label for="linhaEnsino_Indices">Linha de Ensino:</label>
+        <select id="linhaEnsino_Indices">
+          <option value="" disabled selected>Selecione a Linha</option>
+          <option value="LEMB">LEMB</option>
+          <option value="LEMS_LEMC_LEMCT">LEMS, LEMC e LEMCT</option>
+        </select>
+      </div>
 
-        <div id="resultado_Indices" class="resultado">
-            </div>
+      <div class="input-group">
+        <label for="sexo_Indices">Sexo:</label>
+        <select id="sexo_Indices">
+          <option value="" disabled selected>Selecione o Sexo</option>
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+        </select>
+      </div>
 
+      <div class="input-group">
+        <label for="idade_Indices">Idade (anos):</label>
+        <input
+          type="number"
+          id="idade_Indices"
+          min="18"
+          max="65"
+          placeholder="Sua idade"
+        />
+      </div>
+      <button id="mostrarIndices">Mostrar Índices</button>
+
+      <hr />
+
+      <div id="resultado_Indices" class="resultado"></div>
     </div>
 
     <div class="container-desempenho">
-        <div class="header-container">
-            <img id="home2" src="./assets/images/botao-home.png" alt="Home">
-            <h1>Verificar Desempenho</h1>
-        </div>
-        
-        
-        <div class="input-group">
-            <label for="linhaEnsino_Desempenho">Linha de Ensino:</label>
-            <select id="linhaEnsino_Desempenho">
-                <option value="" disabled selected>Selecione a Linha</option>
-                <option value="LEMB">LEMB</option>
-                <option value="LEMS_LEMC_LEMCT">LEMS, LEMC e LEMCT</option>
-            </select>
-        </div>
+      <div class="header-container">
+        <img id="home2" src="./assets/images/home-button.png" alt="Home" />
+        <h1>Verificar Desempenho</h1>
+      </div>
 
-        <div class="input-group">
-            <label for="sexo_Desempenho">Sexo:</label>
-            <select id="sexo_Desempenho">
-                <option value="" disabled selected>Selecione o Sexo</option>
-                <option value="masculino">Masculino</option>
-                <option value="feminino">Feminino</option>
-            </select>
-        </div>
-        
-        <div class="input-group">
-            <label for="idade_Desempenho">Idade:</label>
-            <input type="number" id="idade_Desempenho" min="18" max="65" placeholder="Sua idade (apenas números)">
-        </div>
+      <div class="input-group">
+        <label for="linhaEnsino_Desempenho">Linha de Ensino:</label>
+        <select id="linhaEnsino_Desempenho">
+          <option value="" disabled selected>Selecione a Linha</option>
+          <option value="LEMB">LEMB</option>
+          <option value="LEMS_LEMC_LEMCT">LEMS, LEMC e LEMCT</option>
+        </select>
+      </div>
 
-        <hr>
+      <div class="input-group">
+        <label for="sexo_Desempenho">Sexo:</label>
+        <select id="sexo_Desempenho">
+          <option value="" disabled selected>Selecione o Sexo</option>
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+        </select>
+      </div>
 
-        <h2>Valores de Desempenho</h2>
-        <div class="input-group">
-            <label for="corrida">Corrida (metros):</label>
-            <input type="number" id="corrida" placeholder="Ex: 2800">
-        </div>
-        <div class="input-group">
-            <label for="flexaoBracos">Flexão de Braços (repetições):</label>
-            <input type="number" id="flexaoBracos" placeholder="Ex: 30">
-        </div>
-        <div class="input-group">
-            <label for="abdominal">Abdominal (repetições):</label>
-            <input type="number" id="abdominal" placeholder="Ex: 60">
-        </div>
-        <div class="input-group">
-            <label for="barraFixa">Barra Fixa (repetições/segundos):</label>
-            <input type="text" id="barraFixa" placeholder="Ex: 8 (rep) ou 50 (seg)">
-        </div>
+      <div class="input-group">
+        <label for="idade_Desempenho">Idade:</label>
+        <input
+          type="number"
+          id="idade_Desempenho"
+          min="18"
+          max="65"
+          placeholder="Sua idade (apenas números)"
+        />
+      </div>
 
-        <button id="calcularDesempenho">Calcular Desempenho</button>
+      <hr />
 
-        <div id="resultado_Desempenho" class="resultado">
-            </div>
+      <h2>Valores de Desempenho</h2>
+      <div class="input-group">
+        <label for="corrida">Corrida (metros):</label>
+        <input type="number" id="corrida" placeholder="Ex: 2800" />
+      </div>
+      <div class="input-group">
+        <label for="flexaoBracos">Flexão de Braços (repetições):</label>
+        <input type="number" id="flexaoBracos" placeholder="Ex: 30" />
+      </div>
+      <div class="input-group">
+        <label for="abdominal">Abdominal (repetições):</label>
+        <input type="number" id="abdominal" placeholder="Ex: 60" />
+      </div>
+      <div class="input-group">
+        <label for="barraFixa">Barra Fixa (repetições/segundos):</label>
+        <input
+          type="text"
+          id="barraFixa"
+          placeholder="Ex: 8 (rep) ou 50 (seg)"
+        />
+      </div>
 
+      <button id="calcularDesempenho">Calcular Desempenho</button>
+
+      <div id="resultado_Desempenho" class="resultado"></div>
     </div>
-    
+
     <script type="module" src="./assets/js/script.js" defer></script>
     <script type="module" src="./assets/js/utils.js" defer></script>
     <script type="module" src="./assets/js/indices.js" defer></script>
     <script type="module" src="./assets/js/desempenho.js" defer></script>
     <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-            navigator.serviceWorker
-                .register("./service-worker.js")
-                .then(() => console.log("✅ Service Worker registrado com sucesso"))
-                .catch((err) => console.log("❌ Erro ao registrar Service Worker:", err));
-            });
-        }
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./service-worker.js")
+            .then(() => console.log("✅ Service Worker registrado com sucesso"))
+            .catch((err) =>
+              console.log("❌ Erro ao registrar Service Worker:", err)
+            );
+        });
+      }
     </script>
-
-</body>
+  </body>
 </html>
