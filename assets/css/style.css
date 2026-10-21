@@ -1,164 +1,398 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  margin: 0;
+/* ==========================================================
+   Base
+   ========================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-.pagina-inicial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 90%;
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px 16px;
+}
+
+/* Conteúdo centralizado com largura de leitura confortável
+   (vale também para a página estatico.html) */
+body > * {
+    width: 100%;
+    max-width: 640px;
 }
 
 a {
-  text-decoration: none;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-}
-
-.header-container > h1 {
-  margin-left: 20px;
-}
-
-#home,
-#home2 {
-  width: 45px;
-  height: 45px;
-  margin-right: 5px;
+    text-decoration: none;
 }
 
 p {
-  text-align: justify;
-}
-#titulo-pagina {
-  font-size: 20px;
-  text-align: center;
-  font-weight: bold;
+    margin: 0 0 12px;
+    text-align: justify;
+    hyphens: auto;
 }
 
-#discobulo {
-  width: 80px;
-  height: 110px;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-#indices,
-#desempenho {
-  width: 200px;
-}
-
-#indices:hover,
-#desempenho:hover {
-  background-color: #0056b3;
-}
-
-#indices:active,
-#desempenho:active {
-  background-color: #0056b3;
-  transform: scale(0.95);
-}
-
-.container-indices,
-.container-desempenho {
-  display: none;
-}
-.container-indices-active,
-.container-desempenho-active {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%;
+h1,
+h2,
+h3 {
+    color: #004085;
+    line-height: 1.25;
 }
 
 h1,
 h2 {
-  color: #004085;
-  text-align: center;
-  margin: 5px 0;
+    text-align: center;
+    margin: 8px 0;
 }
 
+h1 {
+    font-size: 1.6rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+
+h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+}
+
+hr {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+/* ==========================================================
+   Botões
+   ========================================================== */
+button {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    background-color: #0056b3;
+    transform: scale(0.97);
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+    outline: 2px solid #004085;
+    outline-offset: 2px;
+}
+
+/* ==========================================================
+   Página inicial
+   ========================================================== */
+.pagina-inicial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+}
+
+#titulo-pagina {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+#discobulo {
+    display: block;
+    width: 80px;
+    height: 110px;
+    margin: 12px auto 4px;
+}
+
+/* Todos os botões do menu com a mesma largura */
+.pagina-inicial > button,
+.pagina-inicial > .botao {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* Link com aparência de botão (substitui <a><button></button></a>) */
+.botao {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    font-size: 16px;
+    text-align: center;
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.botao:hover,
+.botao:active {
+    background-color: #0056b3;
+}
+
+.botao:active {
+    transform: scale(0.97);
+}
+
+.botao:focus-visible {
+    outline: 2px solid #004085;
+    outline-offset: 2px;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+button:disabled:hover,
+button:disabled:active {
+    background-color: #007bff;
+    transform: none;
+}
+
+.pagina-inicial > br {
+    display: none;
+}
+
+.pagina-inicial footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.pagina-inicial footer a {
+    color: inherit;
+    opacity: 0.7;
+}
+
+/* Botão de instalar o app (antes usava estilos inline) */
+#instalarApp {
+    width: auto;
+    margin-top: 0;
+    padding: 10px 20px;
+    background-color: #4b5320;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#instalarApp:hover,
+#instalarApp:active {
+    background-color: #4b5320;
+}
+
+/* O script.js mostra o botão via style.display, que prevalece sobre isto */
+#instalarApp[hidden] {
+    display: none;
+}
+
+/* ==========================================================
+   Telas: Índices e Desempenho
+   ========================================================== */
+.container-indices,
+.container-desempenho {
+    display: none;
+}
+
+.container-indices-active,
+.container-desempenho-active {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Cabeçalho: botão home à esquerda, título realmente centralizado */
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.header-container > h1 {
+    flex: 1;
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+/* Elemento invisível do mesmo tamanho do ícone para equilibrar o título */
+.header-container::after {
+    content: "";
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+}
+
+#home,
+#home2 {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* ==========================================================
+   Formulários
+   ========================================================== */
 .input-group {
-  margin-bottom: 15px;
+    margin-bottom: 16px;
 }
 
 .input-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
 }
 
 .input-group input,
 .input-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+    display: block;
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px; /* evita zoom automático no iPhone */
+    font-family: inherit;
+    background-color: #fff;
 }
 
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 20px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
+/* ==========================================================
+   Resultados
+   ========================================================== */
 .resultado {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #d6d8d9;
-  border-radius: 4px;
-  background-color: #e2e3e5;
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px solid #d6d8d9;
+    border-radius: 4px;
+    background-color: #e2e3e5;
 }
 
-h3 {
-  margin: 10px 0;
+/* Não mostra a caixa cinza enquanto está vazia */
+.resultado:empty {
+    display: none;
 }
-#resultado {
-  margin-top: 10px;
+
+.resultado > h2 {
+    margin: 4px 0 16px;
 }
+
 .card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    padding: 16px;
+    overflow-x: auto; /* tabelas largas rolam dentro do card no celular */
 }
+
+.card:last-child {
+    margin-bottom: 0;
+}
+
+.card p {
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+/* ==========================================================
+   Tabelas
+   ========================================================== */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
 }
+
 th,
 td {
-  border: 1px solid #ccc;
-  text-align: center;
-  padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 8px;
+    white-space: nowrap;
 }
+
 th {
-  background-color: #e9ecef;
+    background-color: #e9ecef;
+}
+
+/* ==========================================================
+   Telas maiores
+   ========================================================== */
+@media (min-width: 640px) {
+    body {
+        padding: 40px 24px;
+    }
+
+    .container-indices-active,
+    .container-desempenho-active {
+        padding: 32px;
+    }
+
+    .header-container > h1 {
+        font-size: 1.6rem;
+    }
+}
+
+/* ==========================================================
+   Telas pequenas
+   ========================================================== */
+@media (max-width: 400px) {
+    body {
+        padding: 16px 10px;
+    }
+
+    .container-indices-active,
+    .container-desempenho-active {
+        padding: 16px;
+    }
+
+    th,
+    td {
+        padding: 6px 4px;
+        font-size: 14px;
+    }
 }
